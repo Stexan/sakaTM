@@ -27,6 +27,7 @@
 		33758F401BEE61C500A9ED03 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33758F3F1BEE61C500A9ED03 /* Category.swift */; };
 		33758F421BEE830000A9ED03 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33758F411BEE830000A9ED03 /* Data.swift */; };
 		33758F461BEEA17C00A9ED03 /* BalloonMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33758F451BEEA17C00A9ED03 /* BalloonMarker.swift */; };
+		33758F481BEF638600A9ED03 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33758F471BEF638500A9ED03 /* User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,7 @@
 		33758F3F1BEE61C500A9ED03 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		33758F411BEE830000A9ED03 /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		33758F451BEEA17C00A9ED03 /* BalloonMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalloonMarker.swift; sourceTree = "<group>"; };
+		33758F471BEF638500A9ED03 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		B53672157FE938BC1D49AD8C /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCC95BB57A708A7B2C2C244D /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		F43FE33A6A58769278A76334 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				33758F3B1BEE2FD700A9ED03 /* UserData.swift */,
 				33758F3F1BEE61C500A9ED03 /* Category.swift */,
 				33758F411BEE830000A9ED03 /* Data.swift */,
+				33758F471BEF638500A9ED03 /* User.swift */,
 				33758F3D1BEE315C00A9ED03 /* GoogleAPIHandler.swift */,
 			);
 			name = Model;
@@ -284,6 +287,7 @@
 				3367C36F1BEE16D700873B9E /* SignUpViewController.swift in Sources */,
 				3367C35E1BEE142100873B9E /* ViewController.swift in Sources */,
 				33758F371BEE2F5E00A9ED03 /* SingleGraphViewController.swift in Sources */,
+				33758F481BEF638600A9ED03 /* User.swift in Sources */,
 				33758F461BEEA17C00A9ED03 /* BalloonMarker.swift in Sources */,
 				33758F3C1BEE2FD700A9ED03 /* UserData.swift in Sources */,
 				33758F3E1BEE315C00A9ED03 /* GoogleAPIHandler.swift in Sources */,

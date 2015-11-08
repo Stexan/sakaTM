@@ -34,7 +34,12 @@ class SignInViewController: UIViewController,APIDelegate,UITextFieldDelegate {
     func handlerDidGetResults(results:Array<AnyObject>?){
         
         handler.delegate = nil;
-        self.performSegueWithIdentifier("HomeSegue", sender: nil);
+        let isDoctor = results?.first as! Bool;
+        if isDoctor == true{
+            self.performSegueWithIdentifier("DocSeg", sender: nil);
+        }else{
+            self.performSegueWithIdentifier("HomeSegue", sender: nil);
+        }
     }
     
     func handlerDidFailWithError(error:NSError?,description:String?){

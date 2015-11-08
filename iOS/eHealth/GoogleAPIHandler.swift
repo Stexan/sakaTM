@@ -13,6 +13,13 @@
 //http://bogdanstanga.com/hacktm/v1/indices
 //http://bogdanstanga.com/hacktm/v1/indice/%/values
 //http://bogdanstanga.com/hacktm/v1/indice/1/add
+//http://bogdanstanga.com/hacktm/v1/patients
+
+/*
+
+cool
+
+*/
 
 import UIKit
 import CoreLocation
@@ -38,6 +45,8 @@ class GoogleAPIHandler: NSObject {
             request.HTTPBody = body;
             if bodyString?.containsString("value=") == true {
                 request.setValue((NSUserDefaults.standardUserDefaults().objectForKey("key") as! String), forHTTPHeaderField: "Api");
+            }else if bodyString?.containsString("patient_email=") == true {
+                request.setValue((NSUserDefaults.standardUserDefaults().objectForKey("key") as! String), forHTTPHeaderField: "Api");
             }
         }else{
             request.HTTPMethod = "GET";
@@ -60,7 +69,7 @@ class GoogleAPIHandler: NSObject {
                     
                     do{
                         if let responseDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
-                            
+                            print(responseDict);
                             
                             dispatch_async(dispatch_get_main_queue(), {
                                 self.performSelector(respSelector, withObject: responseDict);
@@ -86,8 +95,15 @@ class GoogleAPIHandler: NSObject {
         task.resume()
     }
     
-    internal func register(username:String,password:String,email:String){
-        executeLocationQuery(withURL: NSURL.init(string: "http://bogdanstanga.com/hacktm/v1/register")!, bodyString: "name=" + username + "&password=" + password + "&email=" + email, respSelector: Selector("parseRegisterResponse:"));
+    internal func register(username:String,password:String,email:String,doctor:Bool){
+        var link:String;
+        if doctor == true {
+            link = "http://bogdanstanga.com/hacktm/v1/registerdoctor"
+        }else{
+            link = "http://bogdanstanga.com/hacktm/v1/register"
+        }
+        
+        executeLocationQuery(withURL: NSURL.init(string: link)!, bodyString: "name=" + username + "&password=" + password + "&email=" + email, respSelector: Selector("parseRegisterResponse:"));
     }
     
     internal func login(email:String,password:String){
@@ -97,8 +113,10 @@ class GoogleAPIHandler: NSObject {
     internal func getIndices(){
         executeLocationQuery(withURL: NSURL.init(string: "http://bogdanstanga.com/hacktm/v1/indices")!, bodyString: nil, respSelector: Selector("parseCategoryResponse:"));
     }
-    
-    
+
+    internal func getIndices(forUser uid:Int){
+        executeLocationQuery(withURL: NSURL.init(string: "http://bogdanstanga.com/hacktm/v1/patient/" + String(uid) + "/indices")!, bodyString: nil, respSelector: Selector("parseCategoryResponse:"));
+    }
     
     internal func getAllDataForCategory(categoryID:String){
         executeLocationQuery(withURL: NSURL.init(string: "http://bogdanstanga.com/hacktm/v1/indice/" + categoryID + "/values")!, bodyString: nil, respSelector: Selector("parseAllIndicesResponse:"));
@@ -108,6 +126,13 @@ class GoogleAPIHandler: NSObject {
         executeLocationQuery(withURL: NSURL.init(string: "http://bogdanstanga.com/hacktm/v1/indice/" + categoryID + "/add")!, bodyString: "value=" + value, respSelector: Selector("parseAllIndicesResponse:"));
     }
     
+    internal func getDoctorUsers(){
+        executeLocationQuery(withURL: NSURL.init(string: "http://bogdanstanga.com/hacktm/v1/patients")!, bodyString: nil, respSelector: Selector("parseUsersResponse:"));
+    }
+    
+    internal func addUserForDoctor(email:String){
+        executeLocationQuery(withURL: NSURL.init(string: "http://bogdanstanga.com/hacktm/v1/addpatient")!, bodyString: "patient_email=" + email, respSelector: Selector("parseAddUserResponse:"));
+    }
     
     func parseLoginResponse(jsonResponse:NSDictionary){
         let errorKey:Bool = jsonResponse.objectForKey("error") as! Bool;
@@ -115,9 +140,10 @@ class GoogleAPIHandler: NSObject {
             delegate?.handlerDidFailWithError(nil, description: (description: jsonResponse.objectForKey("error_details") as? String));
         }else{
             let user = jsonResponse.objectForKey("user") as! NSDictionary;
+            let isDoctor = Bool(user.objectForKey("doctor") as! Int);
             let key = user.objectForKey("api_key")
             NSUserDefaults.standardUserDefaults().setObject(key, forKey: "key");
-            delegate?.handlerDidGetResults(nil);
+            delegate?.handlerDidGetResults([isDoctor]);
         }
         
     }
@@ -177,11 +203,54 @@ class GoogleAPIHandler: NSObject {
             categ.minValue = minVal
             categ.maxValue = maxVal
             categ.name = dict.objectForKey("name") as? String
-            categ.measurement = minStr.stringByReplacingOccurrencesOfString(part, withString: "", options:NSStringCompareOptions.CaseInsensitiveSearch, range: Range<String.Index>(start: minStr.startIndex, end: minStr.endIndex))
+            categ.measurement = dict.objectForKey("measurement") as? String
             categ.id = dict.objectForKey("id") as? Int
             categoryArray.append(categ);
         }
         
         delegate?.handlerDidGetResults(categoryArray)
+    }
+    
+    func parseUsersResponse(jsonResponse:NSDictionary){
+        let errorKey:Bool = jsonResponse.objectForKey("error") as! Bool;
+        if errorKey == true {
+            delegate?.handlerDidFailWithError(nil, description: (description: jsonResponse.objectForKey("error_details") as? String));
+        }else{
+            let valuesArray = jsonResponse.objectForKey("patients") as! Array<NSDictionary>;
+            var usersArray = Array<User>();
+            
+            for dict in valuesArray{
+                let entry = User();
+                
+                entry.uid = dict.objectForKey("uid") as? Int;
+                entry.name = dict.objectForKey("name") as? String;
+                entry.email = dict.objectForKey("email") as? String;
+                
+                usersArray.append(entry);
+            }
+            
+            delegate?.handlerDidGetResults(usersArray);
+        }
+    }
+    
+    func parseAddUserResponse(jsonResponse:NSDictionary){
+        let errorKey:Bool = jsonResponse.objectForKey("error") as! Bool;
+        if errorKey == true {
+            delegate?.handlerDidFailWithError(nil, description: (description: jsonResponse.objectForKey("error_details") as? String));
+        }else{
+            let valuesArray = jsonResponse.objectForKey("patients") as! Array<NSDictionary>;
+            var usersArray = Array<User>();
+            
+            for dict in valuesArray{
+                let entry = User();
+                
+                entry.uid = dict.objectForKey("uid") as? Int;
+                entry.name = dict.objectForKey("name") as? String;
+                entry.email = dict.objectForKey("email") as? String;
+                
+                usersArray.append(entry);
+            }
+            delegate?.handlerDidGetResults(usersArray);
+        }
     }
 }

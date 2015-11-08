@@ -12,6 +12,7 @@ class CategoryTableViewController: UITableViewController, APIDelegate {
 
     let handler = GoogleAPIHandler();
     
+    var uid:Int?;
     var categoryArray = Array<Category>()
     
     override func viewDidLoad() {
@@ -24,8 +25,12 @@ class CategoryTableViewController: UITableViewController, APIDelegate {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         handler.delegate = self;
-        handler.getIndices();
-        self.tableView.contentInset = UIEdgeInsetsMake(64,0,0,0);
+        if uid == nil{
+            handler.getIndices();
+        }else{
+            handler.getIndices(forUser: uid!);
+        }
+        
     }
 
     override func didReceiveMemoryWarning() {

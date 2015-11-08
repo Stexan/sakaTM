@@ -8,8 +8,14 @@
 
 import UIKit
 
-class AnalisysTableViewController: UITableViewController {
+class AnalisysTableViewController: UITableViewController,APIDelegate,UITextFieldDelegate {
 
+    let handler = GoogleAPIHandler();
+    
+    var userArray = Array<User>()
+    let textWrapperView = UIView(frame: CGRectMake(0,0,UIScreen().bounds.size.width,38));
+    var textField = UITextField(frame: CGRectMake(0,20,280,30))
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -18,6 +24,28 @@ class AnalisysTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        handler.delegate = self;
+        handler.getDoctorUsers();
+        
+        textWrapperView.hidden = false;
+        confTextView();
+        textWrapperView.addSubview(textField);
+        textField.delegate = self;
+        
+    }
+    
+    func confTextView(){
+        let sampleTextField = UITextField(frame: CGRectMake(20,4,280,32))
+        sampleTextField.placeholder = "Enter text here"
+        sampleTextField.font = UIFont.systemFontOfSize(15)
+        sampleTextField.borderStyle = UITextBorderStyle.RoundedRect
+        sampleTextField.autocorrectionType = UITextAutocorrectionType.No
+        sampleTextField.keyboardType = UIKeyboardType.Default
+        sampleTextField.returnKeyType = UIReturnKeyType.Done
+        sampleTextField.clearButtonMode = UITextFieldViewMode.WhileEditing;
+        sampleTextField.contentVerticalAlignment = UIControlContentVerticalAlignment.Center
+        sampleTextField.delegate = self
+        self.textField = sampleTextField;
     }
 
     override func didReceiveMemoryWarning() {
@@ -29,23 +57,26 @@ class AnalisysTableViewController: UITableViewController {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return userArray.count
     }
 
-    /*
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("AnalisysCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
 
         // Configure the cell...
+        let user = userArray[indexPath.row];
+        cell.textLabel?.text = user.name;
 
+        
         return cell
     }
-    */
+    
 
     /*
     // Override to support conditional editing of the table view.
@@ -91,5 +122,59 @@ class AnalisysTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        cell?.selected = false;
+        performSegueWithIdentifier("HomeSegue", sender: userArray[indexPath.row]);
+    }
+    
+    func handlerDidGetResults(results:Array<AnyObject>?){
+        
+        handler.delegate = nil;
+        userArray = results as! Array<User>
+        tableView.reloadData();
+        print(userArray);
+    }
+    
+    func handlerDidFailWithError(error:NSError?,description:String?){
+        
+        handler.delegate = nil;
+        let actionSheetController: UIAlertController = UIAlertController(title: "Error", message: description, preferredStyle: .Alert)
+        let cancelAction: UIAlertAction = UIAlertAction(title: "OK", style: .Cancel) { action -> Void in
+            //Just dismiss the action sheet
+        }
+        actionSheetController.addAction(cancelAction)
+        self.presentViewController(actionSheetController, animated: true, completion: nil)
+        
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "HomeSegue"{
+            
+            let dvc = segue.destinationViewController as! CategoryTableViewController;
+            let user = sender as! User;
+            dvc.uid = user.uid;
+            
+        }
+        
+    }
 
+    
+    @IBAction func addUser(sender: AnyObject) {
+        self.tableView.tableHeaderView = textWrapperView;
+        textField.becomeFirstResponder();
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder();
+        handler.delegate = self;
+        handler.addUserForDoctor(textField.text!);
+        
+        self.tableView.tableHeaderView = nil
+
+        return true;
+    }
+    
 }

@@ -16,6 +16,9 @@ class SignUpViewController: UIViewController,APIDelegate {
     
     @IBOutlet weak var topKeyboardHeight: NSLayoutConstraint!
     @IBOutlet weak var wrapperView: UIView!
+    
+    var isDoctor:Bool = false;
+    
     let handler = GoogleAPIHandler();
     
     override func viewDidLoad() {
@@ -27,14 +30,19 @@ class SignUpViewController: UIViewController,APIDelegate {
     @IBAction func signUp(sender: AnyObject) {
    
         handler.delegate = self;
-        handler.register(nameTextField.text!, password: passwordTextField.text!, email: emailTextField.text!);
+        handler.register(nameTextField.text!, password: passwordTextField.text!, email: emailTextField.text!, doctor:isDoctor);
         
     }
     
     func handlerDidGetResults(results:Array<AnyObject>?){
         
         handler.delegate = nil;
-        self.performSegueWithIdentifier("HomeSegue", sender: nil);
+        
+        if isDoctor == true {
+            self.performSegueWithIdentifier("DoctorSegue", sender: nil);
+        }else{
+            self.performSegueWithIdentifier("HomeSegue", sender: nil);
+        }
     }
     
     func handlerDidFailWithError(error:NSError?,description:String?){
@@ -76,4 +84,8 @@ class SignUpViewController: UIViewController,APIDelegate {
         }
     }
 
+    @IBAction func toggleDoctor(sender: UIButton) {
+        sender.selected = !sender.selected;
+        isDoctor = !isDoctor;
+    }
 }

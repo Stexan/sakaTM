@@ -7,12 +7,12 @@
 
     100% To use For Personal And Commercial Use.
     IN EXCHANGE JUST GIVE US CREDITS AND TELL YOUR FRIENDS ABOUT US
-   
+
     ========================================================  */
 
 
 /*==============================================
-    BASIC  STYLES    
+    BASIC  STYLES
     =============================================*/
 body {
     font-family: 'Open Sans', sans-serif;
@@ -60,10 +60,29 @@ body {
 
 
 /*==============================================
-    MENU STYLES    
+    MENU STYLES
     =============================================*/
 
+/*
+    Chart Style
+*/
+body {
+    padding: 10px;
+}
+#radio-container{
+    margin-top: 10px;
+    width: 500px;
+    text-align: center;
+}
+body{
+    font-family: 'Helvetica Neue', Arial;
+    font-size: 14px;
+    font-weight: normal;
+}
 
+/*
+    Done chart style
+*/
 .navbar-cls-top .navbar-brand {
     color: #fff;
     background: #202020;
@@ -79,6 +98,12 @@ body {
 
 .header-right {
     color: #fff;
+    padding: 15px 50px 5px 50px;
+    float: right;
+    font-size: 16px;
+}
+.header-right .btn .btn-primary {
+	color: #fff;
     padding: 15px 50px 5px 50px;
     float: right;
     font-size: 16px;
@@ -213,7 +238,7 @@ body {
     margin-right: 10px;
 }
 /*==============================================
-    FOOTER  STYLES    
+    FOOTER  STYLES
     =============================================*/
 #footer-sec {
     background-color:#000;
@@ -230,7 +255,7 @@ body {
         text-decoration:none;
     }
 /*==============================================
-    MEDIA QUERIES     
+    MEDIA QUERIES
     =============================================*/
 
 @media (min-width:768px) {

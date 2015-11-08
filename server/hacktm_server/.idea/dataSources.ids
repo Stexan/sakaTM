@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source source="LOCAL" name="Data Source" product="" version="" jdbc-version="" driver-name="" driver-version="" uuid="e3b2200f-8e54-443c-8764-8ec602aad081">
+    <synchronize>true</synchronize>
+    <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+    <jdbc-url>jdbc:mysql://trimitesmsgratuit.ro/3306</jdbc-url>
+    <user-name>trimites_user</user-name>
+    <user-password>dfdedfd8dfc3dfc7dfc3dfdedfcfdfd9dfc7dfd9df9bdf98df99</user-password>
+    <libraries>
+      <library>
+        <url>file://$PROJECT_DIR$/mysql-connector-java-5.1.35-bin.jar</url>
+      </library>
+    </libraries>
+  </data-source>
+</component>

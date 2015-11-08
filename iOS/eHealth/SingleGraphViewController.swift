@@ -17,10 +17,14 @@ class SingleGraphViewController: UIViewController,APIDelegate {
     
     @IBOutlet weak var valueTextField: UITextField!
     let handler = GoogleAPIHandler();
+    var vect:Array<Data> = Array<Data>();
     
+    @IBOutlet weak var measurementLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationItem.title = category.name;
+        measurementLabel.text = category.measurement;
         // Do any additional setup after loading the view.
         handler.delegate = self;
         handler.getAllDataForCategory(String(category.id!));
@@ -48,7 +52,7 @@ class SingleGraphViewController: UIViewController,APIDelegate {
         leftAxis.removeAllLimitLines();
         leftAxis.addLimitLine(ll1);
         leftAxis.addLimitLine(ll2);
-        leftAxis.customAxisMax = Double(category.maxValue!) * 2.0;
+        leftAxis.customAxisMax = Double(category.maxValue! * 2);
         leftAxis.customAxisMin = 0;
         leftAxis.startAtZeroEnabled = false;
         leftAxis.gridLineDashLengths = [5.0, 5.0];
@@ -71,7 +75,6 @@ class SingleGraphViewController: UIViewController,APIDelegate {
         chartView.legend.form = .Line;
         
         chartView.animate(xAxisDuration: 1.5, easingOption:.EaseInOutQuart)
-        //setDataCount(80, range: 150.0);
     }
     
     func setDataCount(dataArray:Array<Data>){
@@ -132,7 +135,10 @@ class SingleGraphViewController: UIViewController,APIDelegate {
     func handlerDidGetResults(results:Array<AnyObject>?){
         
         handler.delegate = nil;
+        
+        chartView.data = nil;
         setDataCount(results as! Array<Data>);
+        vect = results as! Array<Data>;
     }
     
     func handlerDidFailWithError(error:NSError?,description:String?){
