@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="Tregue">
+    <serverData>
+      <paths name="Tregue">
+        <serverdata>
+          <mappings>
+            <mapping deploy="public_html/tregue/" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

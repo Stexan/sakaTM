@@ -1,0 +1,1 @@
+<?phpclass PassHash {    public static function generateSalt() {        return hash('sha512', uniqid(openssl_random_pseudo_bytes(16), TRUE));    }    public static function hashPassword($password, $salt) {        $password = hash('sha512', hash('sha512', $password) . $salt);        return $password;    }}
